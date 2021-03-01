@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div class="container">
+    <h2>Tweets</h2>
+    <div th:each="tweet:${tweetList}">
+        <h5>@<span th:text="${tweet.user.username}"></span>
+            <small><span th:text="${#dates.format(tweet.createdAt, 'M/d/yy')}"></span></small></h5>
+        <p th:utext="${tweet.message}"></p>
+    </div>
+</div>
+</body>
+
+</html>
