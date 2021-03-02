@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.tts.TechTalentTwitter.model.Tweet;
@@ -24,8 +25,8 @@ public class TweetController {
     @Autowired
     private TweetService tweetService;
 
-    @GetMapping(value= {"/tweets", "/"})
-    public String getFeed(Model model){
+    @GetMapping(value = { "/tweets", "/" })
+    public String getFeed(Model model) {
         List<Tweet> tweets = tweetService.findAll();
         model.addAttribute("tweetList", tweets);
         return "feed";
@@ -37,7 +38,7 @@ public class TweetController {
         return "newTweet";
     }
 
-    @PostMapping(value = "/tweets")
+    @PostMapping(value = "/tweets/new")
     public String submitTweetForm(@Valid Tweet tweet, BindingResult bindingResult, Model model) {
         User user = userService.getLoggedInUser();
         if (!bindingResult.hasErrors()) {
@@ -48,4 +49,13 @@ public class TweetController {
         }
         return "newTweet";
     }
+
+    @GetMapping(value = "/tweets/{tag}")
+    public String getTweetsByTag(@PathVariable(value = "tag") String tag, Model model) {
+        List<Tweet> tweets = tweetService.findAllWithTag(tag);
+        model.addAttribute("tweetList", tweets);
+        model.addAttribute("tag", tag);
+        return "taggedTweets";
+    }
+
 }
